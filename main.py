@@ -25,7 +25,7 @@ async def on_message(message):
 
         if content[1] == 'verify':
             if len(content) == 4:
-                verify.verify_member(client, message)
+                await message.channel.send(verify.verify_member(client, message))
             elif len(content) == 2:
                 verify.verify_member_dm(client, message.author, message.guild)
             else:
