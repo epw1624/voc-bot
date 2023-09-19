@@ -7,7 +7,9 @@ import discord
 import verify
 import os
 
-BOT_FUNCTIONS = {'Verification' : 'Use the command "!voc-bot verify" to begin the verification process'}
+BOT_FUNCTIONS = {
+    'Verification' : "Use the command '!voc-bot verify' to begin the verification process in a direct message, or '!voc-bot verify <email> <VOC ID>' to begin the verification process in this channel"
+    }
 
 client = discord.Client(intents=discord.Intents.all())
 
@@ -20,10 +22,9 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    elif message.content.startswith("!voc-bot verify"):
+    if message.content.startswith("!voc-bot"):
         content = message.content.split(' ')
-
-        if content[1] == 'verify':
+        if content[1] == "verify":
             if len(content) == 4:
                 await message.channel.send(verify.verify_member(client, message))
             elif len(content) == 2:
@@ -31,10 +32,9 @@ async def on_message(message):
             else:
                 message.channel.send('Invalid format\nTry "!voc-bot verify <email> <VOC ID>" or "!voc-bot verify"')
         elif content[1] == 'help':
-            return_message = "What the VOC bot can do:\n"
-            for function, description in BOT_FUNCTIONS:
-                message += function.upper() + '\n' + description + '\n\n'
-
+            return_message = ""
+            for function in BOT_FUNCTIONS.keys():
+                return_message += function.upper() + '\n\n' + BOT_FUNCTIONS[function] + '\n\n'
             await message.channel.send(return_message)
         else:
             await message.channel.send("Invalid command! Try '!voc-bot help' for more information")
