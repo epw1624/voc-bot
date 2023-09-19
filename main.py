@@ -5,10 +5,11 @@
 
 import discord
 import verify
+import os
 
 BOT_FUNCTIONS = {'Verification' : 'Use the command "!voc-bot verify" to begin the verification process'}
 
-client = discord.Client(intents=discord.Intents(messages=True, message_content=True, manage_roles=True, dm_messages=True))
+client = discord.Client(intents=discord.Intents.all())
 
 @client.event
 async def on_ready():
@@ -19,11 +20,16 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    elif message.content.startswith("!voc-bot"):
+    elif message.content.startswith("!voc-bot verify"):
         content = message.content.split(' ')
 
         if content[1] == 'verify':
-            verify.verify_member(client, message.author, message.guild)
+            if len(content) == 4:
+                verify.verify_member(client, message)
+            elif len(content) == 2:
+                verify.verify_member_dm(client, message.author, message.guild)
+            else:
+                message.channel.send('Invalid format\nTry "!voc-bot verify <email> <VOC ID>" or "!voc-bot verify"')
         elif content[1] == 'help':
             return_message = "What the VOC bot can do:\n"
             for function, description in BOT_FUNCTIONS:
@@ -32,5 +38,8 @@ async def on_message(message):
             await message.channel.send(return_message)
         else:
             await message.channel.send("Invalid command! Try '!voc-bot help' for more information")
+
+
+client.run(os.getenv('SECRET_KEY'))
 
     
