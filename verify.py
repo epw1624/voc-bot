@@ -3,8 +3,7 @@ import asyncio
 import requests
 import os
 
-ROLE = "test"
-
+ROLES = {"2023": "test23", "2024": "test24"}
 
 async def verify_member_dm(discord_client, discord_user, server):
     def check(message):
@@ -33,8 +32,10 @@ async def verify_member(discord_client, message, server, user):
 
     if response:
         if not response['status']:
+            print(response)
             if response['content']['email'] == email:
-                role = find_role(server, ROLE)
+                expiry = response['content']['enddate'][:4]
+                role = find_role(server, ROLES[expiry])
                 await add_member_role(user, role)
                 return_message = f"{user.mention} is verified!" 
             else:
@@ -60,6 +61,7 @@ def api_handler(voc_id):
     "Authorization": os.getenv("API_KEY")
     }
     response = requests.get(query, headers=header)
+    print(response)
     return response.json()
 
 async def add_member_role(user, role):
