@@ -26,11 +26,11 @@ async def on_message(message):
         content = message.content.split(' ')
         if content[1] == "verify":
             if len(content) == 4:
-                await message.channel.send(verify.verify_member(client, message))
+                await message.channel.send(await verify.verify_member(client, message, message.guild, message.author))
             elif len(content) == 2:
-                verify.verify_member_dm(client, message.author, message.guild)
+                await verify.verify_member_dm(client, message.author, message.guild)
             else:
-                message.channel.send('Invalid format\nTry "!voc-bot verify <email> <VOC ID>" or "!voc-bot verify"')
+                await message.channel.send('Invalid format\nTry "!voc-bot verify <email> <VOC ID>" or "!voc-bot verify"')
         elif content[1] == 'help':
             return_message = ""
             for function in BOT_FUNCTIONS.keys():
