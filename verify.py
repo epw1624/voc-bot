@@ -28,28 +28,41 @@ async def verify_member(discord_client, message, server, user):
     email = content[2]
     voc_id = content[3]
 
-    response = api_handler(voc_id)
+    if not check_id(voc_id):
+        return_message = f"{user.mention} Invalid ID. No member with this ID exists"
 
-    if response:
-        if not response['status']:
-            print(response)
-            if response['content']['email'] == email:
-                expiry = response['content']['enddate'][:4]
-                role = find_role(server, ROLES[expiry])
-                await add_member_role(user, role)
-                return_message = f"{user.mention} is verified!" 
-            else:
-                return_message = f"{user.mention} Email and ID do not match. Ensure to use the email address associated with your VOC account"
-        
-        elif response['status'] == 1:
-            return_message = f"{user.mention} Invalid ID. No member with this ID exists"
-        
-        else: # the bot message for no id parameter and invalid auth key are the same because the user can't do anything about these
-            return_message = f'{user.mention} Verification failed. Please resend the "!voc-bot verify" command to try again'
     else:
-        return_message = f'{user.mention} Verification failed. Please resend the "!voc-bot verify" command to try again'
+        response = api_handler(voc_id)
+
+        if response:
+            if not response['status']:
+                if response['content']['email'] == email:
+                    expiry = response['content']['enddate'][:4]
+                    role = find_role(server, ROLES[expiry])
+                    await add_member_role(user, role)
+                    return_message = f"{user.mention} is verified!" 
+                else:
+                    return_message = f"{user.mention} Email and ID do not match. Ensure to use the email address associated with your VOC account"
+            
+            elif response['status'] == 1:
+                return_message = f"{user.mention} Invalid ID. No member with this ID exists"
+            
+            else: # the bot message for no id parameter and invalid auth key are the same because the user can't do anything about these
+                return_message = f'{user.mention} Verification failed. Please resend the "!voc-bot verify" command to try again'
+        else:
+            return_message = f'{user.mention} Verification failed. Please resend the "!voc-bot verify" command to try again'
     return return_message
     
+def check_id(id):
+    """
+    type-check the id parameter before making an api call
+    """
+    try:
+        id_as_int = int(id)
+        return True
+    except ValueError:
+        return False
+
 
 def api_handler(voc_id):
     """
@@ -58,10 +71,9 @@ def api_handler(voc_id):
     """
     query = os.environ['BASE_URL'] + '?id={id}'.format(id=voc_id)
     header = {
-    "Authorization": os.getenv("API_KEY")
+    "AUTH": os.getenv("API_KEY")
     }
     response = requests.get(query, headers=header)
-    print(response)
     return response.json()
 
 async def add_member_role(user, role):
