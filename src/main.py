@@ -4,8 +4,8 @@
     # on receiving a message with the !verify command, generate a url to the voc login with the "destination" parameter set to the api endpoint
 
 import discord
-import src.verify as verify
-import os
+import verify
+import credentials
 
 BOT_FUNCTIONS = {
     'Verification' : "Use the command '!voc-bot verify' to begin the verification process in a direct message, or '!voc-bot verify <email> <VOC ID>' to begin the verification process in this channel"
@@ -40,6 +40,6 @@ async def on_message(message):
             await message.channel.send("Invalid command! Try '!voc-bot help' for more information")
 
 
-client.run(os.getenv('SECRET_KEY'))
+client.run(credentials.SECRET_KEY)
 
     

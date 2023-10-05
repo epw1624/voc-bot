@@ -1,7 +1,7 @@
 import discord
 import asyncio
 import requests
-import os
+import credentials
 
 ROLES = {"2023": "test23", "2024": "test24"}
 
@@ -69,9 +69,9 @@ def api_handler(voc_id):
     Makes the API call to ubc-voc.com/api.php using the voc_id provided
     Returns the API response in JSON format
     """
-    query = os.environ['BASE_URL'] + '?id={id}'.format(id=voc_id)
+    query = credentials.BASE_URL + '?id={id}'.format(id=voc_id)
     header = {
-    "AUTH": os.getenv("API_KEY")
+    "AUTH": credentials.API_KEY
     }
     response = requests.get(query, headers=header)
     return response.json()
