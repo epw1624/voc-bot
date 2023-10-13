@@ -11,6 +11,12 @@ $ git clone git@gitlab.com:voc/voc-bot.git
 $ cd voc-bot/src
 ```
 
+2. Install the project requirements
+```
+$ cd src
+$ pip install -r requirements.txt
+```
+
 2. Create a credentials.py file with the following values
 ```
 BASE_URL="http://ubc-voc.com/api/verify.php"
