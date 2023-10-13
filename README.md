@@ -13,7 +13,6 @@ $ cd voc-bot/src
 
 2. Install the project requirements
 ```
-$ cd src
 $ pip install -r requirements.txt
 ```
 
