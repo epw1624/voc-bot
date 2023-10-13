@@ -12,7 +12,7 @@ async def verify_member_dm(discord_client, discord_user, server):
         """
         return message.author == discord_user and message.channel.type == discord.ChannelType.private
     
-    await discord_user.send('Verify your account by sending "!voc-bot verify <email> <VOC ID>". Ensure to use the email address associated with your VOC account')
+    await discord_user.send('Verify your account by sending "!voc-bot verify youremail@example.com xxxxx" where "xxxxx" is your VOC ID number. Ensure to use the email address associated with your VOC account')
 
     try:
         message = await discord_client.wait_for('message', check=check, timeout=120)

@@ -8,7 +8,7 @@ import verify
 import credentials
 
 BOT_FUNCTIONS = {
-    'Verification' : "Use the command '!voc-bot verify' to begin the verification process in a direct message, or '!voc-bot verify <email> <VOC ID>' to begin the verification process in this channel"
+    'Verification' : "Use the command '!voc-bot verify' to begin the verification process in a direct message, or '!voc-bot verify youremail@example.com xxxxx' where 'xxxxx' is your VOC ID number to begin the verification process in this channel"
     }
 
 client = discord.Client(intents=discord.Intents.all())
@@ -30,7 +30,7 @@ async def on_message(message):
             elif len(content) == 2:
                 await verify.verify_member_dm(client, message.author, message.guild)
             else:
-                await message.channel.send('Invalid format\nTry "!voc-bot verify <email> <VOC ID>" or "!voc-bot verify"')
+                await message.channel.send('Invalid format\nTry "!voc-bot verify youremail@example.com xxxxx" or "!voc-bot verify", where "xxxxx" is your VOC ID number')
         elif content[1] == 'help':
             return_message = ""
             for function in BOT_FUNCTIONS.keys():
